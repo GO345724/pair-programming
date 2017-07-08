@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Codemirror from 'react-codemirror';
+//import Codemirror from 'react-codemirror';
+import brace from 'brace';
+import AceEditor from 'react-ace';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { Button } from 'react-bootstrap';
@@ -12,30 +14,33 @@ import ThemeSelect from './ThemeSelect';
 import SaveButton from './SaveButton';
 import UserList from './UserList';
 
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/monokai.css';
-import 'codemirror/theme/bespin.css';
-import 'codemirror/theme/3024-day.css';
-import 'codemirror/theme/3024-night.css';
-import 'codemirror/theme/cobalt.css';
-import 'codemirror/theme/eclipse.css';
-import 'codemirror/theme/dracula.css';
-import 'codemirror/theme/isotope.css';
-import 'codemirror/theme/duotone-light.css';
-import 'codemirror/theme/icecoder.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/theme/midnight.css';
-import 'codemirror/theme/solarized.css';
+import 'brace/mode/java';
+import 'brace/mode/javascript';
+import 'brace/mode/python';
+import 'brace/mode/xml';
+import 'brace/mode/ruby';
+import 'brace/mode/sass';
+import 'brace/mode/markdown';
+import 'brace/mode/mysql';
+import 'brace/mode/json';
+import 'brace/mode/html';
+import 'brace/mode/handlebars';
+import 'brace/mode/golang';
+import 'brace/mode/csharp';
+import 'brace/mode/elixir';
+import 'brace/mode/typescript';
+import 'brace/mode/css';
 
-import 'codemirror/mode/javascript/javascript.js';
-import 'codemirror/mode/ruby/ruby.js';
-import 'codemirror/mode/swift/swift.js';
-import 'codemirror/mode/clojure/clojure.js';
-import 'codemirror/mode/python/python.js';
-import 'codemirror/mode/php/php.js';
-import 'codemirror/mode/erlang/erlang.js';
-import 'codemirror/mode/coffeescript/coffeescript.js';
-import 'codemirror/mode/crystal/crystal.js';
+import 'brace/theme/monokai';
+import 'brace/theme/github';
+import 'brace/theme/tomorrow';
+import 'brace/theme/kuroir';
+import 'brace/theme/twilight';
+import 'brace/theme/xcode';
+import 'brace/theme/textmate';
+import 'brace/theme/solarized_dark';
+import 'brace/theme/solarized_light';
+import 'brace/theme/terminal';
 
 class Room extends Component {
   constructor(props) {
@@ -43,7 +48,7 @@ class Room extends Component {
     this.state = {
       code: '',
       mode: 'javascript',
-      theme: 'eclipse',
+      theme: 'monokai',
       users: [],
       currentlyTyping: null
     }
@@ -155,9 +160,10 @@ changeMode(newMode) {
 
   render() {
     var options = {
-        lineNumbers: true,
-        mode: this.state.mode,
-        theme: this.state.theme
+      enableBasicAutocompletion: false,
+      enableLiveAutocompletion: false,
+      enableSnippets: false,
+      showLineNumbers: true
     };
     return(
       <div>
@@ -166,7 +172,15 @@ changeMode(newMode) {
         <UserList users={this.state.users} currentlyTyping={this.state.currentlyTyping}/>
         <ModeSelect mode={this.state.mode} changeMode={this.changeMode} />
         <ThemeSelect theme={this.state.theme} changeTheme={this.changeTheme}/>
-        <Codemirror value={this.state.code} onChange={this.codeIsHappening} options={options}/>
+        <AceEditor
+          value={this.state.code}
+          mode={this.state.mode}
+          theme={this.state.theme}
+          onChange={this.codeIsHappening}
+          setOptions={options}
+          fontSize={18}
+          width="100%"
+        />
         <br/>
         <SaveButton text={this.state.code} lang={this.state.mode} title={this.props.problem.title}/>
         <br/>

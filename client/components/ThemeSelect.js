@@ -6,7 +6,7 @@ class ThemeSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      themes : ["monokai", "bespin", "3024-day", "3024-night", "cobalt", "eclipse", "dracula", "isotope", "duotone-light", "icecoder", "material", "midnight", "solarized"]
+      themes : ['monokai', 'github', 'tomorrow', 'kuroir', 'twilight', 'xcode', 'textmate', 'solarized_dark', 'solarized_light', 'terminal']
     }
     this.triggerChangeTheme = this.triggerChangeTheme.bind(this);
   }

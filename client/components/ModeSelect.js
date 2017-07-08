@@ -6,7 +6,7 @@ class ModeSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modes : ["ruby", "javascript", "clojure", "coffeescript", "crystal", "erlang", "php", "python", "swift"]
+      modes : ['javascript', 'java', 'python', 'xml', 'ruby', 'sass', 'markdown', 'mysql', 'json', 'html', 'handlebars', 'golang', 'csharp', 'elixir', 'typescript', 'css']
     }
     this.triggerChangeMode = this.triggerChangeMode.bind(this);
   }

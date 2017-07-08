@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { Button } from 'react-bootstrap';
 import * as actions from '../actions/problemsActions';
+import io from 'socket.io-client';
 
 import ModeSelect from './ModeSelect';
 import ThemeSelect from './ThemeSelect';
@@ -53,31 +54,71 @@ class Room extends Component {
     this.updateCodeForCurrentUser = this.updateCodeForCurrentUser.bind(this);
     this.updateCurrentlyTyping = this.updateCurrentlyTyping.bind(this);
     this.clearCode = this.clearCode.bind(this);
+    this.joinUser = this.joinUser.bind(this);
+    this.sendUsersAndCode = this.sendUsersAndCode.bind(this);
+    this.removeUser = this.removeUser.bind(this);
+    this.updateCodeInState = this.updateCodeInState.bind(this);
+    this.updateUsersAndCodeInState = this.updateUsersAndCodeInState.bind(this);
   }
 
 componentDidMount() {
+  this.socket = io('/');
   if(this.props.problem.id === undefined) {
     this.props.actions.getProblems();
   } else {
     const user = this.props.currentUser
     sessionStorage.setItem('currentUser', user)
     const users = [...this.state.users, this.props.currentUser]
-    //socket.emit('room', {room: this.props.challenge.id, user: user});
+    this.socket.emit('room', {room: this.props.problem.id, user: user});
     this.setState({users: users})
   }
-  //socket.on('receive change mode', (newMode) => this.updateModeInState(newMode))
+  this.socket.on('receive code', this.updateCodeInState);
+  this.socket.on('new user join', this.joinUser);
+  this.socket.on('load users and code', this.sendUsersAndCode);
+  this.socket.on('receive users and code', this.updateUsersAndCodeInState);
+  this.socket.on('user left room', this.removeUser);
+  this.socket.on('receive change mode', this.updateModeInState);
 }
 
+joinUser(user) {
+    const combinedUsers = [...this.state.users, user];
+    const newUsers = Array.from(new Set(combinedUsers));
+    const cleanUsers = newUsers.filter(user => {return user.length > 1});
+    this.setState({users: cleanUsers});
+}
+updateUsersAndCodeInState(payload) {
+  console.log(payload);
+  const combinedUsers = this.state.users.concat(payload.users)
+  const newUsers = Array.from(new Set(combinedUsers));
+  const cleanUsers = newUsers.filter(user => {return user.length > 1})
+  this.setState({users: cleanUsers, code: payload.code})
+}
+sendUsersAndCode() {
+    this.socket.emit('send users and code', {room: this.props.problem.id, users: this.state.users, code: this.state.code})
+}
+removeUser(user) {
+    const newUsers = Object.assign([], this.state.users);
+    const indexOfUserToDelete = this.state.users.findIndex(Olduser => {return Olduser == user.user})
+    newUsers.splice(indexOfUserToDelete, 1);
+    this.setState({users: newUsers})
+}
+updateCodeInState(payload) {
+  console.log(payload);
+  this.setState({
+    code: payload.code,
+    currentlyTyping: payload.currentlyTyping
+  });
+}
 componentWillReceiveProps(nextProps) {
     const user = nextProps.currentUser
     const users = [...this.state.users, user]
-    //socket.emit('room', {room: nextProps.challenge.id, user: user});
+    this.socket.emit('room', {room: nextProps.problem.id, user: user});
     this.setState({users: users})
   }
 
 changeMode(newMode) {
     this.updateModeInState(newMode)
-    //socket.emit('change mode', {mode: newMode, room: this.props.challenge.id})
+    this.socket.emit('change mode', {mode: newMode, room: this.props.problem.id})
   }
 
  updateModeInState(newMode) {
@@ -93,7 +134,7 @@ changeMode(newMode) {
   codeIsHappening(newCode) {
     this.updateCodeForCurrentUser(newCode)
     this.updateCurrentlyTyping()
-    //socket.emit('coding event', {code: newCode, room: this.props.challenge.id, currentlyTyping: this.props.currentUser})
+    this.socket.emit('coding event', {code: newCode, room: this.props.problem.id, currentlyTyping: this.props.currentUser})
   }
 
   updateCodeForCurrentUser(newCode) {
@@ -109,7 +150,7 @@ changeMode(newMode) {
   clearCode(e) {
     e.preventDefault();
     this.setState({code: ''})
-    //socket.emit('coding event', {code: '', room: this.props.challenge.id})
+    this.socket.emit('coding event', {code: '', room: this.props.problem.id})
   }
 
   render() {

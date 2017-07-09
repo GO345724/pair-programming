@@ -37,7 +37,7 @@ class SaveButton extends Component {
   }
   render() {
     return(
-      <Button className="btn-primary col-lg-12" onClick={this.saveCode}>save</Button>
+      <Button className="btn-primary col-lg-12" onClick={this.saveCode}>Save Code</Button>
     )
   }
 }

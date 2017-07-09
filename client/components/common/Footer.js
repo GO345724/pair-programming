@@ -5,7 +5,9 @@ const styles = {
     width: "100%",
     height: "60px",
     marginTop: "5%",
-    backgroundColor: "#f5f5f5"
+    backgroundColor: "#033940",
+    borderColor: "#337abb",
+    color: "#e7e7e7"
   },
   footerText: {
     paddingTop: "15px"

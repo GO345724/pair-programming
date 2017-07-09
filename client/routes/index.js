@@ -11,11 +11,13 @@ import Room from '../components/Room';
 export default (
   <div>
     <Header />
-    <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/rooms/:id" component={Room} />
-      <Route component={NoMatch} />
-    </Switch>
+    <div className="container">
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/rooms/:id" component={Room} />
+        <Route component={NoMatch} />
+      </Switch>
+    </div>
     <Footer />
   </div>
 );

@@ -167,11 +167,33 @@ changeMode(newMode) {
     };
     return(
       <div>
+      <div className="row">
         <h1>{this.props.problem.title}</h1>
+      </div>
+      <div className="row">
         <p>{this.props.problem.description}</p>
-        <UserList users={this.state.users} currentlyTyping={this.state.currentlyTyping}/>
-        <ModeSelect mode={this.state.mode} changeMode={this.changeMode} />
-        <ThemeSelect theme={this.state.theme} changeTheme={this.changeTheme}/>
+      </div>
+      <div className="row">
+        <div className="col-xs-6 col-md-6 col-lg-6">
+          <ModeSelect mode={this.state.mode} changeMode={this.changeMode} />
+        </div>
+        <div className="col-xs-6 col-md-6 col-lg-6">
+          <ThemeSelect theme={this.state.theme} changeTheme={this.changeTheme}/>
+        </div>
+      </div>
+      <div className="row">
+      <div className="col-xs-3 col-md-3 col-lg-3">
+        <div className="row">
+          <UserList users={this.state.users} currentlyTyping={this.state.currentlyTyping}/>
+        </div>
+        <div className="row">
+          <SaveButton text={this.state.code} lang={this.state.mode} title={this.props.problem.title}/>
+        </div>
+        <div className="row">
+          <Button onClick={this.clearCode} className="col-lg-12">Clear Code</Button>
+        </div>
+      </div>
+      <div className="col-xs-9 col-md-9 col-lg-9">
         <AceEditor
           value={this.state.code}
           mode={this.state.mode}
@@ -181,10 +203,8 @@ changeMode(newMode) {
           fontSize={18}
           width="100%"
         />
-        <br/>
-        <SaveButton text={this.state.code} lang={this.state.mode} title={this.props.problem.title}/>
-        <br/>
-        <Button onClick={this.clearCode} className="col-lg-12">clear code</Button>
+      </div>
+      </div>
       </div>
     )
   }

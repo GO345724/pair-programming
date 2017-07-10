@@ -25,13 +25,21 @@ class SaveButton extends Component {
     const fileExtensionDict = {
       "javascript": "js",
       "ruby": "rb",
-      "swift": "SWIFT",
-      "clojure": "clj",
+      "css": "css",
+      "java": "java",
       "python": "py",
       "php": "php",
-      "erlang": "erl",
-      "coffeescript": "coffee",
-      "crystal": "cr"
+      "xml": "xml",
+      "json": "json",
+      "html": "html",
+      "sass": "sass",
+      "markdown": "mkd",
+      "mysql": "frm",
+      "handlebars": "hbs",
+      "golang": "vm",
+      "csharp": "cs",
+      "elixir": "exs",
+      "typescript": "ts"
     };
     return fileExtensionDict[lang];
   }

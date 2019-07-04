@@ -7,7 +7,9 @@
     "build": "node node_modules/webpack/bin/webpack.js",
     "serve": "node node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base client --inline --hot",
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "Reactjs",
@@ -47,6 +49,8 @@
     "cheerio": "^1.0.0-rc.2",
     "compression": "^1.6.2",
     "express": "^4.15.3",
-    "socket.io": "^2.0.3"
-  }
+    "socket.io": "^2.0.3",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
